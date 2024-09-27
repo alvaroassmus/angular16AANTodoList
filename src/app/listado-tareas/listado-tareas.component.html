@@ -1,0 +1,40 @@
+<div class="task-list">
+  <button [routerLink]="['/crear-tarea']">Crear Nueva Tarea</button>
+  <h2>Lista de Tareas</h2>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <button (click)="filtrar('todas')" [class.active]="filtro === 'todas'">
+      Todas
+    </button>
+    <button
+      (click)="filtrar('completadas')"
+      [class.active]="filtro === 'completadas'"
+    >
+      Completadas
+    </button>
+    <button
+      (click)="filtrar('pendientes')"
+      [class.active]="filtro === 'pendientes'"
+    >
+      Pendientes
+    </button>
+  </div>
+
+  <ul>
+    <li *ngFor="let tarea of tareasFiltradas">
+      <div>
+        <input type="checkbox" [(ngModel)]="tarea.completada" />
+        <strong>{{ tarea.nombre }}</strong> - {{ tarea.fechaLimite }}
+      </div>
+
+      <!-- Lista de personas asociadas -->
+      <ul class="person-list">
+        <li *ngFor="let persona of tarea.personas">
+          {{ persona.nombreCompleto }} ({{ persona.edad }})<br />
+          <em>Habilidades: {{ persona.habilidades.join(', ') }}</em>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
