@@ -18,38 +18,9 @@ export class ListarTareasComponent implements OnInit {
   tareasFiltradas: any[] = [];
 
   ngOnInit(): void {
-    // Aquí deberíamos cargar las tareas desde el servicio
-    this.tareas = [
-      {
-        nombre: 'Tarea A',
-        fechaLimite: '2024-10-01',
-        completada: false,
-        personas: [
-          {
-            nombreCompleto: 'Juan Pérez',
-            edad: 25,
-            habilidades: ['JavaScript', 'Angular'],
-          },
-          {
-            nombreCompleto: 'María López',
-            edad: 30,
-            habilidades: ['TypeScript', 'CSS'],
-          },
-        ],
-      },
-      {
-        nombre: 'Tarea B',
-        fechaLimite: '2024-09-25',
-        completada: true,
-        personas: [
-          {
-            nombreCompleto: 'Carlos Gómez',
-            edad: 40,
-            habilidades: ['HTML', 'SCSS'],
-          },
-        ],
-      },
-    ];
+    const storedList = localStorage.getItem('angular16AANTodoList');
+    const existingList = storedList ? JSON.parse(storedList) : [];
+    this.tareas = existingList;
 
     // Inicialmente mostramos todas las tareas
     this.filtrar('todas');
@@ -64,5 +35,24 @@ export class ListarTareasComponent implements OnInit {
     } else {
       this.tareasFiltradas = this.tareas;
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onToggleCompleta(tarea: any) {
+    // Encuentra el índice de la tarea en la lista existente
+    const index = this.tareas.findIndex((t) => t.nombre === tarea.nombre);
+
+    if (index !== -1) {
+      // Actualiza la tarea
+      this.tareas[index].completada = tarea.completada;
+
+      // Guarda la lista actualizada en localStorage
+      localStorage.setItem('angular16AANTodoList', JSON.stringify(this.tareas));
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getHabilidades(habilidades: any[]): string {
+    return habilidades.map((h) => h.habilidad_value).join(', ');
   }
 }

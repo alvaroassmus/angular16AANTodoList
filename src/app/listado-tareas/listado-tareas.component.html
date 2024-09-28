@@ -24,15 +24,22 @@
   <ul>
     <li *ngFor="let tarea of tareasFiltradas">
       <div>
-        <input type="checkbox" [(ngModel)]="tarea.completada" />
+        <input
+          type="checkbox"
+          [(ngModel)]="tarea.completada"
+          (change)="onToggleCompleta(tarea)"
+        />
         <strong>{{ tarea.nombre }}</strong> - {{ tarea.fechaLimite }}
       </div>
 
       <!-- Lista de personas asociadas -->
+      <div class="person-list">Personas Asociadas</div>
       <ul class="person-list">
         <li *ngFor="let persona of tarea.personas">
           {{ persona.nombreCompleto }} ({{ persona.edad }})<br />
-          <em>Habilidades: {{ persona.habilidades.join(', ') }}</em>
+          <em class="person-list"
+            >Habilidades: {{ getHabilidades(persona.habilidades) }}</em
+          >
         </li>
       </ul>
     </li>

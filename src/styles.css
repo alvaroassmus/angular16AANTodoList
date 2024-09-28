@@ -2,3 +2,6 @@
 body {
   font-family: Arial, sans-serif;
 }
+.task-list {
+  margin: 20px;
+}

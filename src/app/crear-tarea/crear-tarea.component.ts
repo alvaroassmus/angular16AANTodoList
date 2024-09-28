@@ -8,21 +8,25 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { personasUnicasValidator } from '../validadores/validador-personas-unicas';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-crear-tarea',
   templateUrl: './crear-tarea.component.html',
   styleUrls: ['./crear-tarea.component.css'],
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
 })
 export class CrearTareaComponent {
   tareaForm: FormGroup;
+  tareaDuplicada = false;
+  tareaAgregada = false;
 
   constructor(private fb: FormBuilder) {
     this.tareaForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(5)]],
       fechaLimite: ['', Validators.required],
+      completada: [false],
       personas: this.fb.array([], personasUnicasValidator),
     });
   }
@@ -66,9 +70,28 @@ export class CrearTareaComponent {
   }
 
   onSubmit() {
-    console.log(this.tareaForm);
     if (this.tareaForm.valid) {
-      console.log(this.tareaForm.value);
+      const storedList = localStorage.getItem('angular16AANTodoList');
+      const existingList = storedList ? JSON.parse(storedList) : [];
+      const newTarea = this.tareaForm.value;
+      const isDuplicate = existingList.some(
+        (tarea: { nombre: string }) => tarea.nombre === newTarea.nombre
+      );
+      if (isDuplicate) {
+        this.tareaDuplicada = true;
+      } else {
+        this.tareaDuplicada = false;
+        this.tareaAgregada = true;
+        existingList.push(this.tareaForm.value);
+        localStorage.setItem(
+          'angular16AANTodoList',
+          JSON.stringify(existingList)
+        );
+        this.tareaForm.reset({
+          completada: false,
+        });
+        this.personas.clear();
+      }
     }
   }
 }
