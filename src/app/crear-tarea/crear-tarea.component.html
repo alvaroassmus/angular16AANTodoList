@@ -24,6 +24,9 @@
   </div>
 
   <div formArrayName="personas">
+    <div *ngIf="tareaForm.get('personas')?.errors?.['nombreDuplicado']">
+      <p style="color: red">Las personas no deben repetirse.</p>
+    </div>
     <div
       *ngFor="let persona of personas.controls; let i = index"
       [formGroupName]="i"

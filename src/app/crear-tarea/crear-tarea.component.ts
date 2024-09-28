@@ -7,6 +7,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { personasUnicasValidator } from '../validadores/validador-personas-unicas';
 
 @Component({
   standalone: true,
@@ -22,7 +23,7 @@ export class CrearTareaComponent {
     this.tareaForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(5)]],
       fechaLimite: ['', Validators.required],
-      personas: this.fb.array([]),
+      personas: this.fb.array([], personasUnicasValidator),
     });
   }
 
