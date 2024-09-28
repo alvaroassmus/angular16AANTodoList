@@ -1,6 +1,4 @@
-<button [routerLink]="['/listar-tareas']">Volver</button>
 <form [formGroup]="tareaForm" (ngSubmit)="onSubmit()">
-  <!-- Task Name -->
   <label for="nombre">Nombre de la tarea:</label>
   <input id="nombre" formControlName="nombre" />
   <div
@@ -13,7 +11,7 @@
       >El nombre debe tener al menos 5 caracteres.</small
     >
   </div>
-  <!-- Due Date -->
+
   <label for="fechaLimite">Fecha límite:</label>
   <input id="fechaLimite" type="date" formControlName="fechaLimite" />
   <div
@@ -24,20 +22,24 @@
   >
     <small>La fecha límite es obligatoria.</small>
   </div>
+
   <div formArrayName="personas">
     <div
       *ngFor="let persona of personas.controls; let i = index"
       [formGroupName]="i"
     >
       <h4>Persona {{ i + 1 }}</h4>
-      <label for="nombre">Nombre completo:</label>
-      <input formControlName="nombre" />
+      <label for="nombreCompleto">Nombre completo:</label>
+      <input formControlName="nombreCompleto" />
       <div
-        *ngIf="persona.get('nombre')?.invalid && persona.get('nombre')?.touched"
+        *ngIf="
+          persona.get('nombreCompleto')?.invalid &&
+          persona.get('nombreCompleto')?.touched
+        "
       >
         <small>El nombre es obligatorio.</small>
       </div>
-      <!-- Age -->
+
       <label for="edad">Edad:</label>
       <input type="number" formControlName="edad" />
       <div *ngIf="persona.get('edad')?.invalid && persona.get('edad')?.touched">
@@ -46,11 +48,11 @@
 
       <div formArrayName="habilidades">
         <div
-          *ngFor="let habilidad of getHabilidades(i).controls; let j = index"
+          *ngFor="let habilidad of getHabilidades(i)?.controls; let j = index"
           [formGroupName]="j"
         >
-          <label for="habilidad">Habilidad:</label>
-          <input formControlName="habilidad" />
+          <label for="habilidad_value">Habilidad</label>
+          <input id="habilidad_value" formControlName="habilidad_value" />
           <button type="button" (click)="eliminarHabilidad(i, j)">
             Eliminar Habilidad
           </button>
@@ -59,13 +61,11 @@
           Añadir Habilidad
         </button>
       </div>
-      <!-- Remove Person -->
       <button type="button" (click)="eliminarPersona(i)">
         Eliminar Persona
       </button>
     </div>
   </div>
-  <!-- Add Person -->
   <button type="button" (click)="agregarPersona()">Añadir Persona</button>
   <button type="submit" [disabled]="tareaForm.invalid">Guardar Tarea</button>
 </form>
