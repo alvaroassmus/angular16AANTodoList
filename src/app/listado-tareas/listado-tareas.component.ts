@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+/**
+ * Componente para listar las tareas.
+ * Permite al usuario ver las tareas almacenadas y filtrarlas por estado (completadas, pendientes, todas).
+ */
 @Component({
   selector: 'app-listado-tareas',
   standalone: true,
@@ -13,26 +17,37 @@ import { RouterModule } from '@angular/router';
 export class ListarTareasComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tareas: any[] = []; // Aquí almacenaremos las tareas (esto luego se integrará con el servicio)
-  filtro = 'todas';
+  filtro = 'todas'; // Filtro actual para las tareas
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tareasFiltradas: any[] = [];
+  tareasFiltradas: any[] = []; // Tareas filtradas según el estado seleccionado
 
+  /**
+   * Método del ciclo de vida que se ejecuta al inicializar el componente.
+   * Carga las tareas desde el localStorage y aplica el filtro inicial.
+   */
   ngOnInit(): void {
-    const storedList = localStorage.getItem('angular16AANTodoList');
-    const existingList = storedList ? JSON.parse(storedList) : [];
-    this.tareas = existingList;
+    const storedList = localStorage.getItem('angular16AANTodoList'); // Obtiene la lista de tareas del localStorage
+    const existingList = storedList ? JSON.parse(storedList) : []; // Parsea la lista almacenada o crea una lista vacía
+    this.tareas = existingList; // Asigna las tareas a la propiedad del componente
 
     // Inicialmente mostramos todas las tareas
-    this.filtrar('todas');
+    this.filtrar('todas'); // Aplica el filtro por defecto
   }
 
+  /**
+   * Filtra las tareas según el estado seleccionado.
+   * @param estado - Estado para filtrar (completadas, pendientes o todas)
+   */
   filtrar(estado: string): void {
-    this.filtro = estado;
+    this.filtro = estado; // Actualiza el filtro actual
     if (estado === 'completadas') {
+      // Filtra tareas completadas
       this.tareasFiltradas = this.tareas.filter((tarea) => tarea.completada);
     } else if (estado === 'pendientes') {
+      // Filtra tareas pendientes
       this.tareasFiltradas = this.tareas.filter((tarea) => !tarea.completada);
     } else {
+      // Muestra todas las tareas
       this.tareasFiltradas = this.tareas;
     }
   }
@@ -53,6 +68,7 @@ export class ListarTareasComponent implements OnInit {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getHabilidades(habilidades: any[]): string {
+    // Convierte el array de habilidades a una cadena separada por comas
     return habilidades.map((h) => h.habilidad_value).join(', ');
   }
 }
