@@ -102,6 +102,7 @@ export class CrearTareaComponent {
    * Valida el formulario y guarda la tarea en el localStorage.
    */
   onSubmit() {
+    // Limpia los mensajes de error al inicio
     if (this.tareaForm.valid) {
       // Verifica si el formulario es válido
       const storedList = localStorage.getItem('angular16AANTodoList');

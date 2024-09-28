@@ -1,18 +1,20 @@
 <div class="task-list">
-  <button [routerLink]="['/listar-tareas']">Volver</button>
-  <form [formGroup]="tareaForm" (ngSubmit)="onSubmit()">
-    <div *ngIf="tareaDuplicada">
-      <p style="color: red">Ya existe una tarea con ese nombre.</p>
+  <button class="btn-back" [routerLink]="['/listar-tareas']">Volver</button>
+  <form [formGroup]="tareaForm" (ngSubmit)="onSubmit()" class="task-form">
+    <div *ngIf="tareaDuplicada" class="alert alert-danger">
+      Ya existe una tarea con ese nombre.
     </div>
-    <div *ngIf="tareaAgregada">
-      <p style="color: green">Tarea agregada correctamente.</p>
+    <div *ngIf="tareaAgregada" class="alert alert-success">
+      Tarea agregada correctamente.
     </div>
+
     <label for="nombre">Nombre de la tarea:</label>
-    <input id="nombre" formControlName="nombre" />
+    <input id="nombre" formControlName="nombre" class="form-input" />
     <div
       *ngIf="
         tareaForm.get('nombre')?.invalid && tareaForm.get('nombre')?.touched
       "
+      class="error-message"
     >
       <small *ngIf="tareaForm.get('nombre')?.errors?.['required']"
         >El nombre es obligatorio.</small
@@ -23,40 +25,52 @@
     </div>
 
     <label for="fechaLimite">Fecha límite:</label>
-    <input id="fechaLimite" type="date" formControlName="fechaLimite" />
+    <input
+      id="fechaLimite"
+      type="date"
+      formControlName="fechaLimite"
+      class="form-input"
+    />
     <div
       *ngIf="
         tareaForm.get('fechaLimite')?.invalid &&
         tareaForm.get('fechaLimite')?.touched
       "
+      class="error-message"
     >
       <small>La fecha límite es obligatoria.</small>
     </div>
 
     <div formArrayName="personas">
-      <div *ngIf="tareaForm.get('personas')?.errors?.['nombreDuplicado']">
-        <p style="color: red">Las personas no deben repetirse.</p>
+      <div
+        *ngIf="tareaForm.get('personas')?.errors?.['nombreDuplicado']"
+        class="alert alert-danger"
+      >
+        Las personas no deben repetirse.
       </div>
       <div
         *ngFor="let persona of personas.controls; let i = index"
         [formGroupName]="i"
+        class="person-group"
       >
         <h4>Persona {{ i + 1 }}</h4>
         <label for="nombreCompleto">Nombre completo:</label>
-        <input formControlName="nombreCompleto" />
+        <input formControlName="nombreCompleto" class="form-input" />
         <div
           *ngIf="
             persona.get('nombreCompleto')?.invalid &&
             persona.get('nombreCompleto')?.touched
           "
+          class="error-message"
         >
           <small>El nombre es obligatorio.</small>
         </div>
 
         <label for="edad">Edad:</label>
-        <input type="number" formControlName="edad" />
+        <input type="number" formControlName="edad" class="form-input" />
         <div
           *ngIf="persona.get('edad')?.invalid && persona.get('edad')?.touched"
+          class="error-message"
         >
           <small>La edad debe ser mayor a 18 años.</small>
         </div>
@@ -65,23 +79,37 @@
           <div
             *ngFor="let habilidad of getHabilidades(i)?.controls; let j = index"
             [formGroupName]="j"
+            class="skill-group"
           >
             <label for="habilidad_value">Habilidad</label>
-            <input id="habilidad_value" formControlName="habilidad_value" />
-            <button type="button" (click)="eliminarHabilidad(i, j)">
+            <input
+              id="habilidad_value"
+              formControlName="habilidad_value"
+              class="form-input"
+            />
+            <button
+              type="button"
+              class="btn-remove"
+              (click)="eliminarHabilidad(i, j)"
+            >
               Eliminar Habilidad
             </button>
           </div>
-          <button type="button" (click)="agregarHabilidad(i)">
+          <button type="button" class="btn-add" (click)="agregarHabilidad(i)">
             Añadir Habilidad
           </button>
         </div>
-        <button type="button" (click)="eliminarPersona(i)">
+        <button type="button" class="btn-remove" (click)="eliminarPersona(i)">
           Eliminar Persona
         </button>
       </div>
     </div>
-    <button type="button" (click)="agregarPersona()">Añadir Persona</button>
-    <button type="submit" [disabled]="tareaForm.invalid">Guardar Tarea</button>
+
+    <button type="button" class="btn-add" (click)="agregarPersona()">
+      Añadir Persona
+    </button>
+    <button type="submit" class="btn-submit" [disabled]="tareaForm.invalid">
+      Guardar Tarea
+    </button>
   </form>
 </div>
